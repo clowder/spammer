@@ -1,16 +1,30 @@
 class Features
-  extend Forwardable
-  def_delegators :@features, :==
-
   def self.named
-    [:html?, :quoted_printable?]
+    [:html?, :quoted_printable?, :references?]
   end
 
   def initialize(message)
-    @features = self.class.named.map { |feature| message.public_send(feature) ? 1.0 : 0.0 }
+    @message = message
+  end
+
+  def html?
+    @message.html? ? 1.0 : 0.0
+  end
+
+  def quoted_printable?
+    @message.quoted_printable? ? 1.0 : 0.0
+  end
+
+  def references?
+    @message.references.empty? ? 0.0 : 1.0
   end
 
   def to_example
-    Libsvm::Node.features(@features)
+    Libsvm::Node.features(to_a)
+  end
+
+  private
+  def to_a
+    self.class.named.map { |feature| self.send(feature) }
   end
 end

@@ -21,11 +21,23 @@ class Message
   end
 
   def quoted_printable?
-    !!(headers =~ /quoted\-printable/i)
+    !!(header_data =~ /quoted\-printable/i)
+  end
+
+  def references
+    if headers['References']
+      headers['References'].strip.split(/\s+/)
+    else
+      []
+    end
   end
 
   private
   def headers
-    @headers ||= @raw_message.split("\n\n").first
+    @headers ||= Hash[header_data.scan(/^([^:]+):([^\n]+(?:\s{2,}[^\n]+)*)/)]
+  end
+
+  def header_data
+    @header_data ||= @raw_message.split("\n\n").first
   end
 end

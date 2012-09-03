@@ -9,7 +9,7 @@ module SpamDetector
     parameter = Libsvm::SvmParameter.new
 
     # Must finish Coursera ML class
-    parameter.cache_size = 1 # in megabytes
+    parameter.cache_size = 100 # in megabytes
     parameter.eps = 0.001
     parameter.c = 10
 
