@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+# -*- coding: UTF-8 -*-
+
+require './lib/spammer'
+
+spam = Dir['data/spam_2/*'].sample(100)
+ham  = Dir['data/easy_ham/*'].sample(100)
+
+spam_results = spam.map { |path| SpamDetector.classify(path) }
+ham_results  = ham.map  { |path| SpamDetector.classify(path) }
+
+puts "Correctly marked #{ '%.2f' % (spam_results.count(:spam).to_f/spam_results.count.to_f*100.0) }% of spam messages as spam"
+puts "Incorrectly marked #{ '%.i' % (ham_results.count(:spam).to_f/ham_results.count.to_f*100.0) }% of ham messages as spam"
